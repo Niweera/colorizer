@@ -1,8 +1,12 @@
 const Jimp = require("jimp");
+const fs = require("fs");
 
 const colorizer = async (number) => {
   return new Promise(async (resolve, reject) => {
     try {
+      fs.rmSync("./logos", { recursive: true, force: true });
+      fs.mkdirSync("./logos");
+
       const newRed = Math.floor((Math.random() * 1000000) % 256);
       const newGreen = Math.floor((Math.random() * 1000000) % 256);
       const newBlue = Math.floor((Math.random() * 1000000) % 256);
@@ -15,7 +19,7 @@ const colorizer = async (number) => {
         image.bitmap.width,
         image.bitmap.height,
         async function (x, y, idx) {
-          let red = this.bitmap.data[idx + 0];
+          let red = this.bitmap.data[idx];
           let green = this.bitmap.data[idx + 1];
           let blue = this.bitmap.data[idx + 2];
 
@@ -31,7 +35,10 @@ const colorizer = async (number) => {
             await image
               .rgba(false)
               .background(
-                parseInt(Math.floor(Math.random() * 16777215).toString(), 16)
+                parseInt(
+                  Math.floor((Math.random() * 11113999) % 1000).toString(),
+                  16
+                )
               )
               .writeAsync(`./logos/logo_${number}.jpg`);
 
